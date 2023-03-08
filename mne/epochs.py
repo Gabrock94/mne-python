@@ -565,7 +565,7 @@ class BaseEpochs(ProjMixin, ContainsMixin, UpdateChannelsMixin,
                                         sfreq=self.info['sfreq'])
         if self.baseline is not None and self.baseline != baseline:
             logger.info(f'Setting baseline interval to '
-                        f'[{self.baseline[0]}, {self.baseline[1]}] sec')
+                        f'[{self.baseline[0]}, {self.baseline[1]}] s')
 
         logger.info(_log_rescale(self.baseline))
 
@@ -1606,12 +1606,12 @@ class BaseEpochs(ProjMixin, ContainsMixin, UpdateChannelsMixin,
         """Build string representation."""
         s = ' %s events ' % len(self.events)
         s += '(all good)' if self._bad_dropped else '(good & bad)'
-        s += ', %g - %g sec' % (self.tmin, self.tmax)
+        s += ', %g – %g s' % (self.tmin, self.tmax)
         s += ', baseline '
         if self.baseline is None:
             s += 'off'
         else:
-            s += f'{self.baseline[0]:g} – {self.baseline[1]:g} sec'
+            s += f'{self.baseline[0]:g} – {self.baseline[1]:g} s'
             if self.baseline != _check_baseline(
                     self.baseline, times=self.times, sfreq=self.info['sfreq'],
                     on_baseline_outside_data='adjust'):
@@ -1639,7 +1639,7 @@ class BaseEpochs(ProjMixin, ContainsMixin, UpdateChannelsMixin,
             baseline = 'off'
         else:
             baseline = tuple([f'{b:.3f}' for b in self.baseline])
-            baseline = f'{baseline[0]} – {baseline[1]} sec'
+            baseline = f'{baseline[0]} – {baseline[1]} s'
 
         if isinstance(self.event_id, dict):
             event_strings = []
@@ -1692,12 +1692,12 @@ class BaseEpochs(ProjMixin, ContainsMixin, UpdateChannelsMixin,
         if self.reject_tmin is not None and self.reject_tmin < self.tmin:
             logger.info(
                 f'reject_tmin is not in epochs time interval. '
-                f'Setting reject_tmin to epochs.tmin ({self.tmin} sec)')
+                f'Setting reject_tmin to epochs.tmin ({self.tmin} s)')
             self.reject_tmin = self.tmin
         if self.reject_tmax is not None and self.reject_tmax > self.tmax:
             logger.info(
                 f'reject_tmax is not in epochs time interval. '
-                f'Setting reject_tmax to epochs.tmax ({self.tmax} sec)')
+                f'Setting reject_tmax to epochs.tmax ({self.tmax} s)')
             self.reject_tmax = self.tmax
         return self
 
@@ -1732,7 +1732,7 @@ class BaseEpochs(ProjMixin, ContainsMixin, UpdateChannelsMixin,
 
         Parameters
         ----------
-        fname : str
+        fname : path-like
             The name of the file, which should end with ``-epo.fif`` or
             ``-epo.fif.gz``.
         split_size : str | int
@@ -1770,7 +1770,7 @@ class BaseEpochs(ProjMixin, ContainsMixin, UpdateChannelsMixin,
                                       '_epo.fif', '_epo.fif.gz'))
 
         # check for file existence and expand `~` if present
-        fname = _check_fname(fname=fname, overwrite=overwrite)
+        fname = str(_check_fname(fname=fname, overwrite=overwrite))
 
         split_size_bytes = _get_split_size(split_size)
 
@@ -3256,8 +3256,9 @@ class EpochsFIF(BaseEpochs):
                 fname=fname, filetype='epochs',
                 endings=('-epo.fif', '-epo.fif.gz', '_epo.fif', '_epo.fif.gz')
             )
-            fname = _check_fname(fname=fname, must_exist=True,
-                                 overwrite='read')
+            fname = str(
+                _check_fname(fname=fname, must_exist=True, overwrite="read")
+            )
         elif not preload:
             raise ValueError('preload must be used with file-like objects')
 
