@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -204,7 +202,6 @@ numpydoc_xref_aliases = {
     # MNE
     'Label': 'mne.Label', 'Forward': 'mne.Forward', 'Evoked': 'mne.Evoked',
     'Info': 'mne.Info', 'SourceSpaces': 'mne.SourceSpaces',
-    'SourceMorph': 'mne.SourceMorph',
     'Epochs': 'mne.Epochs', 'Layout': 'mne.channels.Layout',
     'EvokedArray': 'mne.EvokedArray', 'BiHemiLabel': 'mne.BiHemiLabel',
     'AverageTFR': 'mne.time_frequency.AverageTFR',
@@ -224,7 +221,7 @@ numpydoc_xref_aliases = {
     'CrossSpectralDensity': 'mne.time_frequency.CrossSpectralDensity',
     'SourceMorph': 'mne.SourceMorph',
     'Xdawn': 'mne.preprocessing.Xdawn',
-    'Report': 'mne.Report', 'Forward': 'mne.Forward',
+    'Report': 'mne.Report',
     'TimeDelayingRidge': 'mne.decoding.TimeDelayingRidge',
     'Vectorizer': 'mne.decoding.Vectorizer',
     'UnsupervisedSpatialFilter': 'mne.decoding.UnsupervisedSpatialFilter',
@@ -268,7 +265,7 @@ numpydoc_xref_ignore = {
     # Undocumented (on purpose)
     'RawKIT', 'RawEximia', 'RawEGI', 'RawEEGLAB', 'RawEDF', 'RawCTF', 'RawBTi',
     'RawBrainVision', 'RawCurry', 'RawNIRX', 'RawGDF', 'RawSNIRF', 'RawBOXY',
-    'RawPersyst', 'RawNihon', 'RawNedf', 'RawHitachi', 'RawFIL',
+    'RawPersyst', 'RawNihon', 'RawNedf', 'RawHitachi', 'RawFIL', 'RawEyelink',
     # sklearn subclasses
     'mapping', 'to', 'any',
     # unlinkable
@@ -631,7 +628,8 @@ html_theme_options = {
     'navigation_with_keys': False,
     'show_toc_level': 1,
     'navbar_end': ['theme-switcher', 'version-switcher', 'navbar-icon-links'],
-    'footer_items': ['copyright'],
+    'footer_start': ['copyright'],
+    'footer_end': [],
     'secondary_sidebar_items': ['page-toc'],
     'analytics': dict(google_analytics_id='G-5TBCPCRB6X'),
     'switcher': {
@@ -1017,6 +1015,11 @@ def reset_warnings(gallery_conf, fname):
     ):
         warnings.filterwarnings(  # deal with other modules having bad imports
             'ignore', message=".*%s.*" % key, category=DeprecationWarning)
+    warnings.filterwarnings(
+        'ignore', message=(
+            'Matplotlib is currently using agg, which is a non-GUI backend.*'
+        )
+    )
     # matplotlib 3.6 in nilearn and pyvista
     warnings.filterwarnings(
         'ignore', message='.*cmap function will be deprecated.*')
@@ -1226,6 +1229,7 @@ custom_redirects = {
     f'{tu}/{si}/plot_creating_data_structures.html': f'{tu}/{si}/10_array_objs.html',  # noqa E501
     f'{tu}/{si}/plot_point_spread.html': f'{tu}/{si}/70_point_spread.html',
     f'{tu}/{si}/plot_dics.html': f'{tu}/{si}/80_dics.html',
+    f'{tu}/{tf}/plot_eyetracking.html': f'{tu}/preprocessing/90_eyetracking_data.html',  # noqa E501
     f'{ex}/{co}/mne_inverse_label_connectivity.html': f'{mne_conn}/{ex}/mne_inverse_label_connectivity.html',  # noqa E501
     f'{ex}/{co}/cwt_sensor_connectivity.html': f'{mne_conn}/{ex}/cwt_sensor_connectivity.html',  # noqa E501
     f'{ex}/{co}/mixed_source_space_connectivity.html': f'{mne_conn}/{ex}/mixed_source_space_connectivity.html',  # noqa E501
